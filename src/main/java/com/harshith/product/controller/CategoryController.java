@@ -2,7 +2,10 @@ package com.harshith.product.controller;
 
 import com.harshith.product.dto.CategoryDto;
 import com.harshith.product.dto.ProductDto;
+import com.harshith.product.exception.CategoryAlreadyExistException;
 import com.harshith.product.service.CategoryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +20,10 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryDto createCategory(@RequestBody CategoryDto categoryDto)
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDto categoryDto)
     {
-        return categoryService.createCategory(categoryDto);
+        CategoryDto savedCategory = categoryService.createCategory(categoryDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
     /*@GetMapping("/{id}")
     public CategoryDto getCategoryById(@PathVariable Long id)

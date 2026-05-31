@@ -3,11 +3,14 @@ package com.harshith.product.service;
 
 import com.harshith.product.dto.CategoryDto;
 import com.harshith.product.entity.Category;
+import com.harshith.product.exception.CategoryAlreadyExistException;
+import com.harshith.product.exception.CategoryNotFoundException;
 import com.harshith.product.mapper.CategoryMapper;
 import com.harshith.product.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -20,6 +23,11 @@ public class CategoryService {
 
     public CategoryDto createCategory(CategoryDto categoryDto)
     {
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDto.getName());
+        if(optionalCategory.isPresent())
+        {
+            throw new CategoryAlreadyExistException("category exists");
+        }
         Category category = CategoryMapper.toCategoryEntity(categoryDto);
         category = categoryRepository.save(category);
         return CategoryMapper.toCategoryDto(category);
@@ -34,7 +42,7 @@ public class CategoryService {
 
     public CategoryDto getCategoryById(Long id)
     {
-        Category category = categoryRepository.findById(id).orElseThrow(()->new RuntimeException("id not found"));
+        Category category = categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException("Id not found"));
         return CategoryMapper.toCategoryDto(category);
     }
 

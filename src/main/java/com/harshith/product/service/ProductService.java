@@ -3,6 +3,8 @@ package com.harshith.product.service;
 import com.harshith.product.dto.ProductDto;
 import com.harshith.product.entity.Category;
 import com.harshith.product.entity.Product;
+import com.harshith.product.exception.CategoryNotFoundException;
+import com.harshith.product.exception.ProductNotFoundException;
 import com.harshith.product.mapper.ProductMapper;
 import com.harshith.product.repository.CategoryRepository;
 import com.harshith.product.repository.ProductRepository;
@@ -18,7 +20,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     public ProductDto createProduct(ProductDto productDto)
     {
-        Category category =  categoryRepository.findById(productDto.getCategoryId()).orElseThrow(()->new RuntimeException("category not found"));
+        Category category =  categoryRepository.findById(productDto.getCategoryId()).orElseThrow(()->new CategoryNotFoundException("category id "+productDto.getCategoryId()+" not found"));
         Product product = ProductMapper.toProductEntity(productDto,category);
         product = productRepository.save(product);
         return ProductMapper.toProductDto(product);
@@ -31,7 +33,7 @@ public class ProductService {
 
     public ProductDto getElementById(Long id)
     {
-       Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
+       Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("product not found"));
        return ProductMapper.toProductDto(product);
 
     }
@@ -52,7 +54,7 @@ public class ProductService {
         if(productRepository.existsById(id))
         {
             productRepository.deleteById(id);
-            return "product"+id+" deleted successfully ";
+            return STR."product\{id} deleted successfully ";
         }
 
         return "product not found";
