@@ -40,7 +40,7 @@ public class ProductService {
     public ProductDto updateProduct(Long id,ProductDto productDto)
     {
         Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("product not found"));
-        Category category = productRepository.findById(productDto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found")).getCategory();
+        Category category = categoryRepository.findById(productDto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
@@ -54,7 +54,7 @@ public class ProductService {
         if(productRepository.existsById(id))
         {
             productRepository.deleteById(id);
-            return STR."product\{id} deleted successfully ";
+            return "product " + id + " deleted successfully";
         }
 
         return "product not found";

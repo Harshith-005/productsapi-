@@ -4,7 +4,6 @@ import com.harshith.product.dto.CategoryDto;
 import com.harshith.product.dto.ProductDto;
 import com.harshith.product.entity.Category;
 import com.harshith.product.entity.Product;
-import org.hibernate.event.spi.PreInsertEvent;
 
 public class ProductMapper {
 

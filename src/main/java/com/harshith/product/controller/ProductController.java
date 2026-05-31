@@ -31,6 +31,7 @@ public class ProductController {
         return productService.getElementById(id);
     }
 
+    @PutMapping("/{id}")
     public ProductDto updateProduct(@PathVariable Long id ,@RequestBody ProductDto productDto)
     {
         return productService.updateProduct(id,productDto);
